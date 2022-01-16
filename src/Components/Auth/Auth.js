@@ -35,9 +35,9 @@ const Auth = () => {
         color="#ff3f6c"
       >
         V
-        <Text d="inline-block" color="#333">
+        <span className="logo">
           Chat
-        </Text>
+        </span>
       </Text>
       <Box mt="30px" w="100%">
         <Tabs variant={"soft-rounded"} colorScheme="orange">
