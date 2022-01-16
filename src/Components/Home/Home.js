@@ -1,11 +1,13 @@
-import React from 'react'
+import { Container } from "@chakra-ui/react";
+import React from "react";
+import Auth from "../Auth/Auth";
 
 const Home = () => {
-    return (
-        <div>
-            Home
-        </div>
-    )
-}
+  return (
+    <Container maxW="xl" centerContent>
+      <Auth/>
+    </Container>
+  );
+};
 
-export default Home
+export default Home;

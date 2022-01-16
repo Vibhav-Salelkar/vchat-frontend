@@ -1,0 +1,7 @@
+.tab:focus {
+    box-shadow: none;
+}
+
+.tab[aria-selected="true"] {
+    color: #ff3f6c;
+}
