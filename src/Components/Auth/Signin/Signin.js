@@ -11,23 +11,38 @@ import React, { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 const Signin = () => {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    const currentTarget = e.target.name;
+    const currentTargetValue = e.target.value;
 
-  const handleSubmit = () => {};
+    setForm({
+      ...form,
+      [currentTarget]: currentTargetValue,
+    });
+  };
+
+  const handleSubmit = () => {
+  };
 
   return (
     <VStack mt="10px" spacing={4}>
-      <FormControl id="email" isRequired>
+      <FormControl id="signin-email" isRequired>
         <FormLabel htmlFor="email">Email</FormLabel>
-        <Input placeholder="Enter your email" onChange={handleChange} />
+        <Input name="email" placeholder="Enter your email" onChange={handleChange} />
       </FormControl>
 
-      <FormControl id="password" isRequired>
+      <FormControl id="signin-password" isRequired>
         <FormLabel htmlFor="password">Password</FormLabel>
         <InputGroup>
           <Input
+            name="password"
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
             onChange={handleChange}

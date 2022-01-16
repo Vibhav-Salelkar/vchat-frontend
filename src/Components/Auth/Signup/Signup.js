@@ -21,28 +21,38 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+      const currentTarget = e.target.name;
+      const currentTargetValue = e.target.value;
 
-  const handleAvatar = () => {};
+      setForm({
+          ...form,
+          [currentTarget]: currentTargetValue
+      })
+  };
 
-  const handleSubmit = () => {};
+  const handleAvatar = (file) => {};
+
+  const handleSubmit = () => {
+  };
 
   return (
     <VStack mt="10px" spacing={4}>
       <FormControl id="name" isRequired>
         <FormLabel htmlFor="name">Name</FormLabel>
-        <Input placeholder="Enter your name" onChange={handleChange} />
+        <Input name="name" placeholder="Enter your name" onChange={handleChange} />
       </FormControl>
 
       <FormControl id="email" isRequired>
         <FormLabel htmlFor="email">Email</FormLabel>
-        <Input placeholder="Enter your email" onChange={handleChange} />
+        <Input name="email" placeholder="Enter your email" onChange={handleChange} />
       </FormControl>
 
       <FormControl id="password" isRequired>
         <FormLabel htmlFor="password">Password</FormLabel>
         <InputGroup>
           <Input
+            name="password"
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
             onChange={handleChange}
@@ -63,6 +73,7 @@ const Signup = () => {
       <FormControl id="confirm-password" isRequired>
         <FormLabel htmlFor="confirm-password">Confirm Password</FormLabel>
         <Input
+          name="confirmPassword"
           type={"password"}
           placeholder="Confirm your password"
           onChange={handleChange}
@@ -72,6 +83,7 @@ const Signup = () => {
       <FormControl id="avatar">
         <FormLabel htmlFor="avatar">Avatar</FormLabel>
         <Input
+          name="avatar"
           type={"file"}
           p={1}
           accept="image/*"
