@@ -5,10 +5,13 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom'; 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { signIn } from "../../../api";
 
 const Signin = () => {
   const [form, setForm] = useState({
@@ -17,6 +20,9 @@ const Signin = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const history = useHistory();
 
   const handleChange = (e) => {
     const currentTarget = e.target.name;
@@ -28,7 +34,42 @@ const Signin = () => {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setLoading(true);
+    if(!form.email || !form.password) {
+      toast({
+        title: 'Please provide required data',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      })
+      setLoading(false);
+    }
+    try {
+      const {data} = await signIn(form);
+      toast({
+        title: `Welcome ${data.result.name}`,
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+        position: "top-right"
+      })
+      localStorage.setItem('profile', JSON.stringify(data))
+      setLoading(false)
+      history.push('/chats')
+    } catch (error) {
+      toast({
+        title: 'Error',
+        status: 'error',
+        description: error.response.data.message,
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      })
+      setLoading(false)
+      return;
+    }
   };
 
   return (
@@ -60,7 +101,7 @@ const Signin = () => {
         </InputGroup>
       </FormControl>
 
-      <Button onClick={handleSubmit} w="100%" colorScheme="blue">
+      <Button isLoading={loading} onClick={handleSubmit} w="100%" colorScheme="blue">
         Sign In
       </Button>
     </VStack>

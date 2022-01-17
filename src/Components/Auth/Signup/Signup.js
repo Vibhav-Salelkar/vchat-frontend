@@ -124,7 +124,8 @@ const Signup = () => {
       return;
     } catch (error) {
       toast({
-        title: 'Error, signup unsuccessful',
+        title: 'Error',
+        description: error.response.data.message,
         status: 'error',
         duration: 4000,
         isClosable: true,
