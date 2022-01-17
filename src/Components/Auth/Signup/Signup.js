@@ -11,6 +11,9 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom'; 
+
+import { signUp } from "../../../api";
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -23,6 +26,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const history = useHistory();
 
   const handleChange = (e) => {
       const currentTarget = e.target.name;
@@ -58,6 +62,13 @@ const Signup = () => {
       .then((data) => {
         setForm({...form, avatar: data.url.toString()});
         setLoading(false);
+        toast({
+          title: 'Avatar uploaded successfully.',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+          position: "top-right"
+        })
       }).catch(err => {
         console.log(err);
         setLoading(false);
@@ -74,8 +85,54 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = () => {
-    console.log(form);
+  const handleSubmit = async () => {
+    setLoading(true);
+    if(!form.email || !form.password || !form.confirmPassword) {
+      toast({
+        title: 'Please provide required data',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      })
+      setLoading(false)
+      return;
+    }
+    if(form.password !== form.confirmPassword) {
+      toast({
+        title: 'Paasword don\'t match',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      })
+      setLoading(false)
+      return;
+    }
+    try {
+      const {data} = await signUp(form);
+      toast({
+        title: 'Profile created successfully.',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+        position: "top-right"
+      })
+      localStorage.setItem('profile', JSON.stringify(data))
+      setLoading(false)
+      history.push('/chats')
+      return;
+    } catch (error) {
+      toast({
+        title: 'Error, signup unsuccessful',
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+        position: "top-right"
+      })
+      setLoading(false)
+      return;
+    }
   };
 
   return (

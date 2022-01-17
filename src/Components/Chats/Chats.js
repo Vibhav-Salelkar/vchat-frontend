@@ -6,13 +6,10 @@ const Chats = () => {
     const [chats, setChats] = useState([])
 
     const fetchChats = async () => {
-        const {data} = await api.fetchChats();
-
-        setChats(data)
+        
     }
 
     useEffect(() => {
-        fetchChats()
     }, [])
 
     return (
