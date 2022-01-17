@@ -5,6 +5,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -20,6 +21,8 @@ const Signup = () => {
     avatar: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   const handleChange = (e) => {
       const currentTarget = e.target.name;
@@ -31,9 +34,48 @@ const Signup = () => {
       })
   };
 
-  const handleAvatar = (file) => {};
+  const handleAvatar = (file) => {
+    setLoading(true);
+    if(file === undefined) {
+      toast({
+        title: 'Please select avatar',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      })
+      return;
+    }
+    if(file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg") {
+      let data = new FormData();
+      data.append('upload_preset', 'vchatapp');
+      data.append('file', file);
+      data.append('cloud_name', 'dwnabprdz');
+      fetch("https://api.cloudinary.com/v1_1/dwnabprdz/image/upload", {
+        method: "post",
+        body: data
+      }).then((res) => res.json())
+      .then((data) => {
+        setForm({...form, avatar: data.url.toString()});
+        setLoading(false);
+      }).catch(err => {
+        console.log(err);
+        setLoading(false);
+      })
+    }else {
+      toast({
+        title: 'Please select avatar',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      })
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = () => {
+    console.log(form);
   };
 
   return (
@@ -91,7 +133,7 @@ const Signup = () => {
         />
       </FormControl>
 
-      <Button onClick={handleSubmit} w="100%" colorScheme="blue">
+      <Button isLoading={loading} onClick={handleSubmit} w="100%" colorScheme="blue">
         Sign Up
       </Button>
     </VStack>
