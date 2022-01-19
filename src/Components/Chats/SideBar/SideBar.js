@@ -14,7 +14,7 @@ import {
   toast,
   useDisclosure,
 } from "@chakra-ui/react";
-import { findUser } from "../../../api";
+import { createChat, findUser } from "../../../api";
 import UserCard from "./UserCard/UserCard";
 
 const SideBar = ({ children }) => {
@@ -22,6 +22,7 @@ const SideBar = ({ children }) => {
   const [loadingChat, setLoadingChat] = useState(false);
   const [search, setSearch] = useState("");
   const [searchData, setSearchData] = useState([]);
+  const [createdChat, setCreatedChat] = useState();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -47,8 +48,24 @@ const SideBar = ({ children }) => {
     }
   };
 
-  const handleCreateChat =() => {
-      
+  const handleCreateChat = async (userId) => {
+      try {
+        setLoading(true)
+        const {data} = await createChat({userId})
+        setLoading(false);
+        setCreatedChat(data);
+        onClose();
+      } catch (error) {
+        setLoading(false);
+        toast({
+            title: 'Error',
+            description: error.response.data.message,
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+            position: "top-right"
+        })
+      }
   }
 
   return (
@@ -74,7 +91,7 @@ const SideBar = ({ children }) => {
             loading ? <Box d="flex" justifyContent={'center'} mt="5rem" width={'100%'}><Spinner/></Box> : 
             (
                 searchData?.map(user => {
-                    return <UserCard key={user._id} user={user} handleCreateChat={handleCreateChat}/>
+                    return <UserCard key={user._id} user={user} handleCreateChat={()=>handleCreateChat(user._id)}/>
                 })
             ) 
             }
