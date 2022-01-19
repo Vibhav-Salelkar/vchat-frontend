@@ -13,6 +13,7 @@ import { Search2Icon, BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../../Store/ChatProvider";
 import AccountDetails from "./AccountDetails/AccountDetails";
 import { useHistory } from "react-router-dom";
+import SideBar from "../SideBar/SideBar";
 
 const Navbar = () => {
   const { user } = ChatState();
@@ -57,7 +58,7 @@ const Navbar = () => {
         V<span className="logo">Chat</span>
       </Text>
       <div>
-        <Button variant="ghost">
+        <SideBar>
           <Search2Icon w={3} h={3} mt="0.1rem" />
           <Text
             display={{ base: "none", md: "block" }}
@@ -67,7 +68,7 @@ const Navbar = () => {
           >
             Search
           </Text>
-        </Button>
+        </SideBar>
         <Menu>
           <MenuButton pr={2}>
             <BellIcon m={1} fontSize={"xl"} />

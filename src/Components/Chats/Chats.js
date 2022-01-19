@@ -6,6 +6,7 @@ import ChatScreen from './ChatScreen/ChatScreen';
 import SideBar from './SideBar/SideBar';
 import UsersScreen from './UsersScreen/UsersScreen';
 import './Chats.css';
+import Navbar from './Navbar/Navbar';
 
 const Chats = () => {
     const { user } = ChatState();
@@ -14,7 +15,7 @@ const Chats = () => {
         <div className='Chats'>
             {user && (
                 <>
-                <SideBar/>
+                <Navbar/>
                 <Box 
                     d='flex'
                     padding={'10px'}
