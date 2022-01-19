@@ -12,9 +12,16 @@ import {
 import { Search2Icon, BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../../Store/ChatProvider";
 import AccountDetails from "./AccountDetails/AccountDetails";
+import { useHistory } from "react-router-dom";
 
 const Navbar = () => {
   const { user } = ChatState();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    localStorage.removeItem('profile');
+    history.push('/');
+  }
 
   return (
     <Box
@@ -38,7 +45,7 @@ const Navbar = () => {
           <AccountDetails user={user}>
             <MenuItem>My Profile</MenuItem>
           </AccountDetails>
-          <MenuItem>Logout</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </MenuList>
       </Menu>
       <Text
