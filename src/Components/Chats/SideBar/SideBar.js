@@ -10,6 +10,7 @@ import {
   DrawerOverlay,
   Input,
   Spinner,
+  Text,
   toast,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -31,7 +32,6 @@ const SideBar = ({ children }) => {
     try{
         setLoading(true)
         const {data} = await findUser(search);
-        console.log(data.user);
         setLoading(false);
         setSearchData(data.user);
     }catch(error) {
@@ -62,11 +62,11 @@ const SideBar = ({ children }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Search Chat</DrawerHeader>
+          <DrawerHeader><Text d="inline-block" color="#ff3f6c">Search</Text> Chat</DrawerHeader>
           <DrawerBody>
             <Box d="flex">
               <Input onChange={(e)=>setSearch(e.target.value)} placeholder="Search..." />
-              <Button ml="0.4rem" onClick={handleSearch}>
+              <Button bg="#ff3f6c" color="#fff"_hover={{bg:"#f3332c"}} ml="0.4rem" onClick={handleSearch}>
                 Search
               </Button>
             </Box>
@@ -74,7 +74,7 @@ const SideBar = ({ children }) => {
             loading ? <Box d="flex" justifyContent={'center'} mt="5rem" width={'100%'}><Spinner/></Box> : 
             (
                 searchData?.map(user => {
-                    return <UserCard handleCreateChat={handleCreateChat}/>
+                    return <UserCard key={user._id} user={user} handleCreateChat={handleCreateChat}/>
                 })
             ) 
             }
