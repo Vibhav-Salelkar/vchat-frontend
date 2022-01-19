@@ -17,7 +17,7 @@ const ChatProvider = ({children}) => {
         }
     },[history])
 
-    return <ChatContext.Provider>{children}</ChatContext.Provider>
+    return <ChatContext.Provider value={{user,setUser}}>{children}</ChatContext.Provider>
 }
 
 export const ChatState = () => {
