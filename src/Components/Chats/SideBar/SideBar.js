@@ -28,6 +28,7 @@ const SideBar = ({ children }) => {
 
   const handleSearch = async () => {
     if (!search) {
+        setSearchData([])
         return
     }
     try{
