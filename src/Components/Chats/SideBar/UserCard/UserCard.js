@@ -7,7 +7,7 @@ const UserCard = ({ user, handleCreateChat }) => {
     <Box
       cursor={"pointer"}
       backgroundColor="#f0f0f0"
-      onClick={handleCreateChat}
+      onClick={()=>handleCreateChat(user._id)}
       _hover={{
         background: "#BAABDA",
         color: "#333",

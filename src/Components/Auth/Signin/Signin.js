@@ -48,6 +48,7 @@ const Signin = () => {
     }
     try {
       const { data } = await signIn(form);
+      await localStorage.setItem("profile", JSON.stringify(data));
       toast({
         title: `Welcome ${data.result.name}`,
         status: "success",
@@ -55,7 +56,6 @@ const Signin = () => {
         isClosable: true,
         position: "top-right",
       });
-      localStorage.setItem("profile", JSON.stringify(data));
       setLoading(false);
       history.push("/chats");
     } catch (error) {

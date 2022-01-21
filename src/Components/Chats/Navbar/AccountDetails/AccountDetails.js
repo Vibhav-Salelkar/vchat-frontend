@@ -34,18 +34,18 @@ const AccountDetails = ({ user, children }) => {
             <Image
               borderRadius={"full"}
               boxSize={"9.5rem"}
-              src={user.result.avatar || "https://via.placeholder.com/150"}
+              src={user.avatar || "https://via.placeholder.com/150"}
             />
             <Box mt="1.2rem" mb="1.2rem">
               <Text fontSize={"0.9rem"} color="#ff3f6c">
                 <span style={{ fontWeight: "bold", color: "#333" }}>Name:</span>{" "}
-                {user.result.name}
+                {user.name}
               </Text>
               <Text fontSize={"0.9rem"} color="#ff3f6c">
                 <span style={{ fontWeight: "bold", color: "#333" }}>
                   Email:
                 </span>{" "}
-                {user.result.email}
+                {user.email}
               </Text>
             </Box>
           </ModalBody>

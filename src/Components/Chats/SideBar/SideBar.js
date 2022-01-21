@@ -11,18 +11,22 @@ import {
   Input,
   Spinner,
   Text,
-  toast,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { createChat, findUser } from "../../../api";
 import UserCard from "./UserCard/UserCard";
+import {ChatState} from '../../../Store/ChatProvider';
 
 const SideBar = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
   const [search, setSearch] = useState("");
   const [searchData, setSearchData] = useState([]);
-  const [createdChat, setCreatedChat] = useState();
+
+  const toast = useToast();
+
+  const {createdChat,setCreatedChat, chats, setChats} = ChatState();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -48,19 +52,27 @@ const SideBar = ({ children }) => {
         })
     }
   };
-
+  
   const handleCreateChat = async (userId) => {
       try {
         setLoading(true)
         const {data} = await createChat({userId})
+
+        let currentData = data.result ? data.result : data;
+        const isTrue = chats.find((chat) => {
+          return chat._id === currentData._id;
+        })
+        if(!isTrue){
+          setChats([currentData, ...chats])
+        }
         setLoading(false);
-        setCreatedChat(data);
         onClose();
+        setCreatedChat(currentData);
       } catch (error) {
+        console.log(error);
         setLoading(false);
         toast({
             title: 'Error',
-            description: error.response.data.message,
             status: 'error',
             duration: 4000,
             isClosable: true,
@@ -92,11 +104,12 @@ const SideBar = ({ children }) => {
             loading ? <Box d="flex" justifyContent={'center'} mt="5rem" width={'100%'}><Spinner/></Box> : 
             (
                 searchData?.map(user => {
-                    return <UserCard key={user._id} user={user} handleCreateChat={()=>handleCreateChat(user._id)}/>
+                    return <UserCard key={user._id} user={user} handleCreateChat={handleCreateChat}/>
                 })
             ) 
             }
-          </DrawerBody>
+            {loadingChat && <Spinner/>}
+          </DrawerBody> 
         </DrawerContent>
       </Drawer>
     </>

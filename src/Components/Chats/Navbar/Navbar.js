@@ -9,7 +9,7 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
-import { Search2Icon, BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { Search2Icon, BellIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../../Store/ChatProvider";
 import AccountDetails from "./AccountDetails/AccountDetails";
 import { useHistory } from "react-router-dom";
@@ -19,8 +19,8 @@ const Navbar = () => {
   const { user } = ChatState();
   const history = useHistory();
 
-  const handleLogout = () => {
-    localStorage.removeItem('profile');
+  const handleLogout = async () => {
+    await localStorage.removeItem('profile');
     history.push('/');
   }
 
@@ -36,8 +36,8 @@ const Navbar = () => {
       <Menu>
         <MenuButton>
           <Avatar
-            name={user.result.name}
-            src={user.result.avatar}
+            name={user.name}
+            src={user.avatar}
             size="sm"
             curser="pointer"
           />

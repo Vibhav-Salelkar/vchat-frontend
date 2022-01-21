@@ -10,23 +10,19 @@ import Navbar from './Navbar/Navbar';
 
 const Chats = () => {
     const { user } = ChatState();
-   
+
     return (
         <div className='Chats'>
-            {user && (
-                <>
-                <Navbar/>
-                <Box 
-                    d='flex'
-                    padding={'10px'}
-                    justifyContent={'space-between'}
-                    height={'95%'}
-                >
-                    <UsersScreen/>
-                    <ChatScreen/>
-                </Box>
-                </>
-            )}
+            {user && <Navbar/>}
+            <Box 
+                d='flex'
+                padding={'10px'}
+                justifyContent={'space-between'}
+                height={'95%'}
+            >
+                {user && <ChatScreen/>}
+                {user && <UsersScreen/>}
+            </Box>
         </div>
     )
 }
