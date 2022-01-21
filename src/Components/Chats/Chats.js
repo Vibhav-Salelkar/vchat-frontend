@@ -9,11 +9,11 @@ import './Chats.css';
 import Navbar from './Navbar/Navbar';
 
 const Chats = () => {
-    const { user } = ChatState();
-
+    let user = JSON.parse(localStorage.getItem('profile')).result;    
+ 
     return (
         <div className='Chats'>
-            {user && <Navbar/>}
+            {user && <Navbar user={user}/>}
             <Box 
                 d='flex'
                 padding={'10px'}
@@ -21,7 +21,7 @@ const Chats = () => {
                 height={'95%'}
             >
                 {user && <ChatScreen/>}
-                {user && <UsersScreen/>}
+                {user && <UsersScreen user={user}/>}
             </Box>
         </div>
     )

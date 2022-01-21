@@ -15,8 +15,7 @@ import AccountDetails from "./AccountDetails/AccountDetails";
 import { useHistory } from "react-router-dom";
 import SideBar from "../SideBar/SideBar";
 
-const Navbar = () => {
-  const { user } = ChatState();
+const Navbar = ({user}) => {
   const history = useHistory();
 
   const handleLogout = async () => {

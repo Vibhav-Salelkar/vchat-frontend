@@ -4,9 +4,9 @@ import { getChats } from "../../../api";
 import { ChatState } from "../../../Store/ChatProvider";
 import { SmallAddIcon } from "@chakra-ui/icons";
 
-const UsersScreen = () => {
+const UsersScreen = ({user}) => {
   const [loggedUser,setLoggedUser] = useState()
-  const { setCreatedChat, createdChat, chats, setChats, user } = ChatState();
+  const { setCreatedChat, createdChat, chats, setChats } = ChatState();
   const [loading, setLoading] = useState(false);
 
   const toast = useToast();
