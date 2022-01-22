@@ -7,12 +7,14 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChatState } from "../../../../Store/ChatProvider";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import AccountDerails from "../../Navbar/AccountDetails/AccountDetails";
 import EditGroup from "../EditGroup/EditGroup";
-import { sendMessageApi } from "../../../../api";
+import { fetchAllMessages, sendMessageApi } from "../../../../api";
+import './ChatBox.css';
+import Messages from '../Messages/Messages';
 
 const ChatBox = ({ reFetch, setReFetch }) => {
   const { user, setCreatedChat, createdChat } = ChatState();
@@ -38,6 +40,33 @@ const ChatBox = ({ reFetch, setReFetch }) => {
     }
   };
 
+  const fetchMessages = async () => {
+    if(!createdChat){
+      return
+    }
+
+    try {
+      setLoading(true);
+      const {data} = await fetchAllMessages(createdChat._id)
+      setLoading(false);
+      setMessages(data)
+    } catch (error) {
+      console.log(error);
+      setLoading(false)
+      toast({
+        title: "Error",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchMessages();    
+  }, [createdChat]);
+  
   const handleMessage = (e) => {
     setNewMessage(e.target.value);
   };
@@ -90,7 +119,7 @@ const ChatBox = ({ reFetch, setReFetch }) => {
             ) : (
               <>
                 {createdChat.chatName.toUpperCase()}
-                <EditGroup reFetch={reFetch} setReFetch={setReFetch} />
+                <EditGroup fetchMessages={fetchMessages} reFetch={reFetch} setReFetch={setReFetch} />
               </>
             )}
           </Text>
@@ -105,7 +134,11 @@ const ChatBox = ({ reFetch, setReFetch }) => {
             justifyContent="flex-end"
             flexDirection="column"
           >
-            {loading ? <Spinner /> : <div></div>}
+            {
+            loading ? <Spinner /> : <div className="messageScreen">
+              <Messages messages={messages}/>
+            </div>
+            }
             <FormControl onKeyDown={sendMessage} isRequired mt={4}>
               <Input
                 value={newMessage}

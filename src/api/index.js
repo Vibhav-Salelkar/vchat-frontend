@@ -20,3 +20,4 @@ export const editGroup = (editGroupData) => API.put('/chats/editgroup', editGrou
 export const addInGroup = (addGroupData) => API.put('/chats/addingroup', addGroupData);
 export const removeFromGroup = (removeFromGroupData) => API.put('/chats/removefromgroup', removeFromGroupData);
 export const sendMessageApi = (msgData) => API.post('/message', msgData);
+export const fetchAllMessages = (chat) => API.get(`/message/${chat}`);

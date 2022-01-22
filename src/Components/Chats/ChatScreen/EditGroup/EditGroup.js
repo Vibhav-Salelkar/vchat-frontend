@@ -22,7 +22,7 @@ import SelectedUser from "../../UsersScreen/GroupModal/SelectedUser/SelectedUser
 import UserCard from "../../SideBar/UserCard/UserCard";
 import { addInGroup, editGroup, findUser, removeFromGroup } from "../../../../api";
 
-const EditGroup = ({ reFetch, setReFetch }) => {
+const EditGroup = ({ reFetch, setReFetch, fetchMessages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { createdChat, setCreatedChat, user } = ChatState();
   const [editdGroupName, setEditedGroupName] = useState();
@@ -85,7 +85,7 @@ const EditGroup = ({ reFetch, setReFetch }) => {
   const handleGroup = async (userToAdd) => {
     if (createdChat.users.find((u) => u._id === userToAdd._id)) {
       toast({
-        title: "User already exit in group",
+        title: "User already exist in group",
         status: "warning",
         duration: 4000,
         isClosable: true,
@@ -151,6 +151,7 @@ const EditGroup = ({ reFetch, setReFetch }) => {
       });
 
       userToRemove._id === user._id ? setCreatedChat() : setCreatedChat(data.removedUser);
+      fetchMessages();
       setReFetch(!reFetch);
       setLoading(false);
     } catch (error) {
