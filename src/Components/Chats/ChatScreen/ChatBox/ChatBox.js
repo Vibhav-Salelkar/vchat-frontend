@@ -3,6 +3,7 @@ import React from 'react';
 import { ChatState } from '../../../../Store/ChatProvider';
 import {ArrowBackIcon} from "@chakra-ui/icons";
 import AccountDerails from '../../Navbar/AccountDetails/AccountDetails';
+import EditGroup from '../EditGroup/EditGroup';
 
 const ChatBox = ({reFetch, setReFetch}) => {
   const {user, setCreatedChat, createdChat} = ChatState();
@@ -53,6 +54,7 @@ const ChatBox = ({reFetch, setReFetch}) => {
             ): (
               <>
                 {createdChat.chatName.toUpperCase()}
+                <EditGroup/>
               </>
             )}
           </Text>
