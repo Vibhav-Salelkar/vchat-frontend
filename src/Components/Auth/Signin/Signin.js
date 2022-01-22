@@ -34,6 +34,13 @@ const Signin = () => {
     });
   };
 
+  const handleTest = () => {
+    setForm({
+      email: 'test@example.com',
+      password: 'test123'
+    })
+  }
+
   const handleSubmit = async () => {
     setLoading(true);
     if (!form.email || !form.password) {
@@ -77,6 +84,7 @@ const Signin = () => {
       <FormControl id="signin-email" isRequired>
         <FormLabel htmlFor="email">Email</FormLabel>
         <Input
+          value={form.email}
           name="email"
           placeholder="Enter your email"
           onChange={handleChange}
@@ -87,6 +95,7 @@ const Signin = () => {
         <FormLabel htmlFor="password">Password</FormLabel>
         <InputGroup>
           <Input
+            value={form.password}
             name="password"
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
@@ -112,6 +121,15 @@ const Signin = () => {
         colorScheme="blue"
       >
         Sign In
+      </Button>
+      <Button
+        isLoading={loading}
+        onClick={handleTest}
+        w="100%"
+        color={'#fff'}
+        bg={'red.400'}
+      >
+        Click For Test Credentials
       </Button>
     </VStack>
   );
