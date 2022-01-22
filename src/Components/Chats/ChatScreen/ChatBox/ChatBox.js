@@ -27,6 +27,7 @@ const ChatBox = ({reFetch, setReFetch}) => {
     <>
       {
         createdChat ? (
+          <>
           <Text
             fontSize={{base: '1.5rem', md: '1.7rem'}}
             width={'100%'}
@@ -55,6 +56,20 @@ const ChatBox = ({reFetch, setReFetch}) => {
               </>
             )}
           </Text>
+          <Box
+            width='100%'
+            height='100%'
+            borderRadius='10px'
+            overflowY='hidden'
+            padding={3}
+            backgroundColor='#f0f0f0'
+            display='flex'
+            justifyContent='flex-end'
+            flexDirection='column'
+        >
+
+          </Box>
+          </>
         ): (
           <Box
             display={'flex'}

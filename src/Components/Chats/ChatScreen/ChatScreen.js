@@ -9,6 +9,7 @@ const ChatScreen = ({reFetch, setReFetch}) => {
         <Box
             display={{base: createdChat?'flex':'none', md:'flex'}}
             borderRadius={'10px'}
+            flexDirection='column'
             width={{base: '100%', md:'65%'}}
             p={3}
             mr={2}
