@@ -15,7 +15,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { findUser } from "../../../../api";
+import { createGroup, findUser } from "../../../../api";
 import { ChatState } from "../../../../Store/ChatProvider";
 import UserCard from "../../SideBar/UserCard/UserCard";
 import SelectedUser from "./SelectedUser/SelectedUser";
@@ -89,13 +89,27 @@ const GroupModal = ({ children }) => {
         }) 
         return 
     }
+    let groupData = {
+        name: groupName,
+        users: JSON.stringify(selectedUsers.map(user=>user._id))
+    }
     try {
-        
+        setLoading(true)
+        const {data} = await createGroup(groupData);
+        setChats([data.foundGroupChat, ...chats])
+        onClose();
+        toast({
+            title: 'Group Successfully created',
+            status: 'success',
+            duration: 4000,
+            isClosable: true,
+            position: "top-right"
+        }) 
     } catch (error) {
         console.log(error);
         setLoading(false)
         toast({
-            title: 'Error! make sure atleast 3 users are selected',
+            title: 'Error! make sure atleast 2 users are selected',
             status: 'warning',
             duration: 4000,
             isClosable: true,
