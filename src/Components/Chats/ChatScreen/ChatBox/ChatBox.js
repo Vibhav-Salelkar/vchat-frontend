@@ -54,7 +54,7 @@ const ChatBox = ({reFetch, setReFetch}) => {
             ): (
               <>
                 {createdChat.chatName.toUpperCase()}
-                <EditGroup/>
+                <EditGroup reFetch={reFetch} setReFetch={setReFetch}/>
               </>
             )}
           </Text>

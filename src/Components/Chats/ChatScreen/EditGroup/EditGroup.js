@@ -1,12 +1,13 @@
-import { Box, Button, FormControl, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, FormControl, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import {EditIcon} from "@chakra-ui/icons";
 import { ChatState } from '../../../../Store/ChatProvider';
 import SelectedUser from '../../UsersScreen/GroupModal/SelectedUser/SelectedUser';
 import UserCard from '../../SideBar/UserCard/UserCard';
+import { editGroup } from '../../../../api';
 
 
-const EditGroup = () => {
+const EditGroup = ({reFetch, setReFetch}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { createdChat, setCreatedChat, user} = ChatState(); 
   const [editdGroupName, setEditedGroupName] = useState();
@@ -14,15 +15,33 @@ const EditGroup = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
  
+  const toast = useToast();
+
   const handleRename = async () => {
     if(!editdGroupName) {
       return
     }
     try {
       setLoading(true);
+
+      const {data} = await editGroup({
+        name: editdGroupName,
+        groupId: createdChat._id
+      })
+      setLoading(false);
+      setCreatedChat(data.existingGroup)
+      setReFetch(!reFetch);
+
     } catch (error) {
       setLoading(false)
       console.log(error);
+      toast({
+        title: 'Error',
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+        position: "top-right"
+    })
     }  
   }
 
@@ -62,7 +81,7 @@ const EditGroup = () => {
               <FormControl display="flex" mb={2}>
                   <Input placeholder="Edit Group Name" mb={3} onChange={(e) => setEditedGroupName(e.target.value)}>
                   </Input>
-                  <Button loading={loading} ml='0.5rem' onClick={handleRename}>
+                  <Button backgroundColor={'blue.300'} _hover={{backgroundColor: 'blue.600', color: '#fff'}} isLoading={loading} ml='0.5rem' onClick={handleRename}>
                     Update
                   </Button>
               </FormControl>
