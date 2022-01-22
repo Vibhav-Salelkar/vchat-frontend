@@ -18,7 +18,7 @@ import Messages from '../Messages/Messages';
 
 import io, { Socket } from "socket.io-client";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://vachatbackend.herokuapp.com";
 var socket, selectedChatCompare;
 
 const ChatBox = ({ reFetch, setReFetch }) => {
