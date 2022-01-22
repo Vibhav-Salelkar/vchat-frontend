@@ -57,7 +57,6 @@ const GroupModal = ({ children }) => {
 
   const handleGroup = (user) => {
     if(selectedUsers.includes(user)){
-        console.log('yes');
         toast({
             title: 'User already added',
             status: 'warning',

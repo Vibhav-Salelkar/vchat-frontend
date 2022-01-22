@@ -17,3 +17,5 @@ export const createChat = (userId) => API.post('/chats', userId);
 export const getChats = () => API.get('/chats');
 export const createGroup = (groupData) => API.post('/chats/group',groupData);
 export const editGroup = (editGroupData) => API.put('/chats/editgroup', editGroupData); 
+export const addInGroup = (addGroupData) => API.put('/chats/addingroup', addGroupData);
+export const removeFromGroup = (removeFromGroupData) => API.put('/chats/removefromgroup', removeFromGroupData);
