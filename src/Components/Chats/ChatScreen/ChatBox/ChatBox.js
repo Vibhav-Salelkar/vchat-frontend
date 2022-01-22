@@ -16,11 +16,22 @@ import { fetchAllMessages, sendMessageApi } from "../../../../api";
 import './ChatBox.css';
 import Messages from '../Messages/Messages';
 
+import io, { Socket } from "socket.io-client";
+
+const ENDPOINT = "http://localhost:5000";
+var socket, selectedChatCompare;
+
 const ChatBox = ({ reFetch, setReFetch }) => {
-  const { user, setCreatedChat, createdChat } = ChatState();
+  const { setCreatedChat, createdChat } = ChatState();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState();
   const [loading, setLoading] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
+  let user = JSON.parse(localStorage.getItem('profile')).result;
+
+  const [socketConnected, setSocketConnected] = useState(false);
 
   const toast = useToast();
 
@@ -48,6 +59,9 @@ const ChatBox = ({ reFetch, setReFetch }) => {
     try {
       setLoading(true);
       const {data} = await fetchAllMessages(createdChat._id)
+      
+      socket.emit('join chat', createdChat._id);
+      
       setLoading(false);
       setMessages(data)
     } catch (error) {
@@ -64,21 +78,64 @@ const ChatBox = ({ reFetch, setReFetch }) => {
   }
 
   useEffect(() => {
-    fetchMessages();    
+    socket = io(ENDPOINT);
+    socket.emit('setup', user);
+    socket.on('connected', () => setSocketConnected(true))
+    socket.on('typing',()=>setIsTyping(true))
+    socket.on('stop typing',()=>setIsTyping(false))
+  }, []);
+  
+  useEffect(() => {
+    socket.on('message received',(newMessage) => {
+      if(!selectedChatCompare || newMessage.chat._id!==selectedChatCompare._id){
+        //notification
+      }else {
+        setMessages([...messages, newMessage])
+      }
+    })
+  });
+  
+
+  useEffect(() => {
+    fetchMessages(); 
+    selectedChatCompare = createdChat;   
   }, [createdChat]);
   
   const handleMessage = (e) => {
     setNewMessage(e.target.value);
+
+    if(!socketConnected) return
+
+    if(!typing) {
+      setTyping(true);
+      socket.emit('typing',createdChat._id);
+    }
+
+    let typeTime = new Date().getTime();
+    let timeLen = 3000;
+    setTimeout(()=> {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - typeTime;
+
+      if(timeDiff >=timeLen && typing) {
+        socket.emit('stop typing', createdChat._id)
+        setTyping(false);
+      }
+    },timeLen)
   };
 
   const sendMessage = async (e) => {
     if (e.key === "Enter" && newMessage) {
+      socket.emit('stop typing',createdChat._id);
       try {
         setNewMessage('');
         const {data} = await sendMessageApi({
           content: newMessage,
           chatId: createdChat._id
         });
+
+        socket.emit('new message', data);
+
         setMessages([...messages, data]);
       } catch (error) {
         console.log(error);
@@ -136,10 +193,14 @@ const ChatBox = ({ reFetch, setReFetch }) => {
           >
             {
             loading ? <Spinner /> : <div className="messageScreen">
-              <Messages messages={messages}/>
+              <Messages user={user} messages={messages}/>
             </div>
             }
             <FormControl onKeyDown={sendMessage} isRequired mt={4}>
+              {
+              isTyping?
+                <Box mb="0.15rem" fontWeight={400} color={'#6e6d6d'} fontSize={'0.8rem'}>Typing...</Box> : <></>           
+              }
               <Input
                 value={newMessage}
                 backgroundColor={"#fff"}
