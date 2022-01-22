@@ -4,7 +4,7 @@ import {EditIcon} from "@chakra-ui/icons";
 import { ChatState } from '../../../../Store/ChatProvider';
 import SelectedUser from '../../UsersScreen/GroupModal/SelectedUser/SelectedUser';
 import UserCard from '../../SideBar/UserCard/UserCard';
-import { editGroup } from '../../../../api';
+import { editGroup, findUser } from '../../../../api';
 
 
 const EditGroup = ({reFetch, setReFetch}) => {
@@ -45,8 +45,27 @@ const EditGroup = ({reFetch, setReFetch}) => {
     }  
   }
 
-  const handleSearch = () => {
-
+  const handleSearch =async (searchQuery) => {
+    setSearch(searchQuery);
+    if(!searchQuery){
+        return 
+    }
+    try {
+        setLoading(true)
+        const {data} = await findUser(searchQuery);
+        setLoading(false);
+        setSearchResult(data.user);
+    } catch (error) {
+        console.log(error);
+        setLoading(false);
+        toast({
+            title: 'Error',
+               status: 'error',
+            duration: 4000,
+            isClosable: true,
+            position: "top-right"
+        })
+    }
   }
 
   const handleGroup = () => {
