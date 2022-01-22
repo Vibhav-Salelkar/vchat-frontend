@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import { getChats } from "../../../api";
 import { ChatState } from "../../../Store/ChatProvider";
 import { SmallAddIcon } from "@chakra-ui/icons";
+import GroupModal from "./GroupModal/GroupModal";
 
-const UsersScreen = ({user}) => {
-  const [loggedUser,setLoggedUser] = useState()
+const UsersScreen = ({ user }) => {
+  const [loggedUser, setLoggedUser] = useState();
   const { setCreatedChat, createdChat, chats, setChats } = ChatState();
   const [loading, setLoading] = useState(false);
 
@@ -30,12 +31,12 @@ const UsersScreen = ({user}) => {
   };
 
   const getSender = (user, users) => {
-    if(users){
+    if (users) {
       return users[0]._id === user._id ? users[1].name : users[0].name;
-    }else {
-      return
+    } else {
+      return;
     }
-  }
+  };
 
   useEffect(() => {
     fetchChats();
@@ -68,9 +69,11 @@ const UsersScreen = ({user}) => {
           </Text>
           hats
         </Box>
-        <Button d="flex" fontSize="0.8rem" rightIcon={<SmallAddIcon />}>
-          Create Group
-        </Button>
+        <GroupModal>
+          <Button d="flex" fontSize="0.8rem" rightIcon={<SmallAddIcon />}>
+            Create Group
+          </Button>
+        </GroupModal>
       </Box>
       <Box
         d="flex"
@@ -82,29 +85,27 @@ const UsersScreen = ({user}) => {
         p={3}
         backgroundColor="#f8f8f8"
       >
-        {chats.length >0 ? (
+        {chats.length > 0 ? (
           <Stack overflowY={"scroll"}>
             {chats.map((chat) => {
-              return <Box
-                px={3}
-                py={2}
-                borderRadius={"5px"}
-                key={chat._id}
-                cursor={"pointer"}
-                backgroundColor={createdChat === chat ? "#38b3ac" : "#e8e8e8"}
-                color={createdChat === chat ? "white" : "#000"}
-                onClick={() => setCreatedChat(chat)}
-              >
-                <Text>
-                    {
-                        !chat.isGroup? 
-                            getSender(user, chat.users)
-                        : (
-                            chat.chatName
-                        )
-                    }
-                </Text>  
-              </Box>;
+              return (
+                <Box
+                  px={3}
+                  py={2}
+                  borderRadius={"5px"}
+                  key={chat._id}
+                  cursor={"pointer"}
+                  backgroundColor={createdChat === chat ? "#38b3ac" : "#e8e8e8"}
+                  color={createdChat === chat ? "white" : "#000"}
+                  onClick={() => setCreatedChat(chat)}
+                >
+                  <Text>
+                    {!chat.isGroup
+                      ? getSender(user, chat.users)
+                      : chat.chatName}
+                  </Text>
+                </Box>
+              );
             })}
           </Stack>
         ) : (

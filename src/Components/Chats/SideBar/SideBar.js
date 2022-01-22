@@ -104,7 +104,7 @@ const SideBar = ({ children }) => {
             loading ? <Box d="flex" justifyContent={'center'} mt="5rem" width={'100%'}><Spinner/></Box> : 
             (
                 searchData?.map(user => {
-                    return <UserCard key={user._id} user={user} handleCreateChat={handleCreateChat}/>
+                    return <UserCard key={user._id} user={user} handleComponentClick={() =>handleCreateChat(user._id)}/>
                 })
             ) 
             }
