@@ -10,7 +10,8 @@ import Navbar from './Navbar/Navbar';
 
 const Chats = () => {
     let user = JSON.parse(localStorage.getItem('profile')).result;    
- 
+    const [reFetch , setReFecth] = useState(false)
+
     return (
         <div className='Chats'>
             {user && <Navbar user={user}/>}
@@ -20,8 +21,8 @@ const Chats = () => {
                 justifyContent={'space-between'}
                 height={'95%'}
             >
-                {user && <ChatScreen/>}
-                {user && <UsersScreen user={user}/>}
+                {user && <ChatScreen reFetch={reFetch} setReFecth={setReFecth}/>}
+                {user && <UsersScreen reFetch={reFetch} user={user}/>}
             </Box>
         </div>
     )

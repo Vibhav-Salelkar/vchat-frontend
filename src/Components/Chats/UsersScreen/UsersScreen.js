@@ -5,8 +5,7 @@ import { ChatState } from "../../../Store/ChatProvider";
 import { SmallAddIcon } from "@chakra-ui/icons";
 import GroupModal from "./GroupModal/GroupModal";
 
-const UsersScreen = ({ user }) => {
-  const [loggedUser, setLoggedUser] = useState();
+const UsersScreen = ({ user, reFectch }) => {
   const { setCreatedChat, createdChat, chats, setChats } = ChatState();
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +39,7 @@ const UsersScreen = ({ user }) => {
 
   useEffect(() => {
     fetchChats();
-  }, []);
+  }, [reFectch]);
 
   return (
     <Box

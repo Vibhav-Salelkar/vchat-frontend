@@ -1,5 +1,6 @@
 import {
   Box,
+  IconButton,
   Image,
   Modal,
   ModalBody,
@@ -10,6 +11,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import {QuestionOutlineIcon} from '@chakra-ui/icons';
 import React from "react";
 
 const AccountDetails = ({ user, children }) => {
@@ -17,12 +19,12 @@ const AccountDetails = ({ user, children }) => {
 
   return (
     <>
-      {children ? <span onClick={onOpen}>{children}</span> : null}
+      {children ? <span onClick={onOpen}>{children}</span> : (<IconButton d={{base: 'flex'}} onClick={onOpen} icon={<QuestionOutlineIcon/>}/>)} 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontSize={"1rem"} d="flex" justifyContent={"center"}>
-            My Profile
+            Profile Information
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
